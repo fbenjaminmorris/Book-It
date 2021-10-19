@@ -1,22 +1,31 @@
-const router = require('express').Router();
-const {
-  createUser,
-  getSingleUser,
-  saveBook,
-  deleteBook,
-  login,
-} = require('../../controllers/user-controller');
+const bookSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    author: {
+      type: String,
+      required: true,
+      unique: true,
+      
+    },
+    description: {
+      type: String,
+      required: true,
+    },
 
-// import middleware
-const { authMiddleware } = require('../../utils/auth');
+    id: {
+      type: String,
+      required: true,
+    },
 
-// put authMiddleware anywhere we need to send a token for verification of user
-router.route('/').post(createUser).put(authMiddleware, saveBook);
+  }
 
-router.route('/login').post(login);
+ 
+   );
 
-router.route('/me').get(authMiddleware, getSingleUser);
+   modules.exports = bookSchema;
 
-router.route('/books/:bookId').delete(authMiddleware, deleteBook);
 
-module.exports = router;
