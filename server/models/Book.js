@@ -1,31 +1,22 @@
-const { Schema } = require('mongoose');
+const router = require('express').Router();
+const {
+  createUser,
+  getSingleUser,
+  saveBook,
+  deleteBook,
+  login,
+} = require('../../controllers/user-controller');
 
+// import middleware
+const { authMiddleware } = require('../../utils/auth');
 
-const bookSchema = new Schema({
-  authors: [
-    {
-      type: String,
-    },
-  ],
-  description: {
-    type: String,
-    required: true,
-  },
+// put authMiddleware anywhere we need to send a token for verification of user
+router.route('/').post(createUser).put(authMiddleware, saveBook);
 
-  bookId: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-  },
-  link: {
-    type: String,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-});
+router.route('/login').post(login);
 
-module.exports = bookSchema;
+router.route('/me').get(authMiddleware, getSingleUser);
+
+router.route('/books/:bookId').delete(authMiddleware, deleteBook);
+
+module.exports = router;
